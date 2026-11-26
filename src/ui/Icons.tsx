@@ -1,5 +1,5 @@
 // Ícones de traço (24×24, currentColor). Decorativos: o rótulo acessível fica no botão.
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 
 const PATHS: Record<string, ReactNode> = {
   select: <path d="M5 3.5 18.5 10l-6 1.8L10 18z" />,
@@ -182,23 +182,32 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
 }
 
 /**
- * Marca do Aurora Board: os colchetes de canto do design system em volta de duas formas ligadas.
- * O traço interno segue o tema (verde profundo no claro, off-white no escuro).
+ * Marca do Aurora Board, "lousa recortada" (escolhida pelo Mauro em 26-nov-2026; o desenho de
+ * referência é design/marca/icone.svg): os colchetes de canto do design system em volta da lousa
+ * cheia, com o diagrama vazado. Sem o ladrilho preto do ícone do app; a lousa segue o tema (verde
+ * profundo no claro, off-white no escuro).
  */
 export function BrandMark({ size = 28, className }: { size?: number; className?: string }) {
+  const maskId = `recorte-${useId().replace(/:/g, '')}`;
   return (
-    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false" className={className}>
-      <g stroke="#00e676" strokeWidth="2.6" strokeLinecap="round" className="pulse">
-        <path d="M3.5 10V7a3.5 3.5 0 0 1 3.5-3.5h3" />
-        <path d="M22 3.5h3A3.5 3.5 0 0 1 28.5 7v3" />
-        <path d="M28.5 22v3a3.5 3.5 0 0 1-3.5 3.5h-3" />
-        <path d="M10 28.5H7A3.5 3.5 0 0 1 3.5 25v-3" />
-      </g>
-      <g style={{ stroke: 'var(--marca-traco, #0f3d2e)' }} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="8.5" y="9" width="8" height="6.5" rx="1.6" />
-        <circle cx="20.5" cy="20.5" r="3.4" />
-        <path d="M15 15.5l3 2.6" />
-      </g>
+    <svg width={size} height={size} viewBox="6 6 52 52" fill="none" aria-hidden="true" focusable="false" className={className}>
+      <defs>
+        <mask id={maskId} maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+          <rect width="64" height="64" fill="#fff" />
+          <rect x="21" y="22.5" width="9" height="8" rx="2" fill="#000" />
+          <circle cx="40" cy="39" r="4.5" fill="#000" />
+          <path d="M28.5 29L36.5 35.5" stroke="#000" strokeWidth="2.6" strokeLinecap="round" />
+        </mask>
+      </defs>
+      <path
+        className="pulse"
+        d="M10 19V15A5 5 0 0 1 15 10H19M45 10H49A5 5 0 0 1 54 15V19M54 45V49A5 5 0 0 1 49 54H45M19 54H15A5 5 0 0 1 10 49V45"
+        stroke="#00e676"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <rect x="16" y="17.5" width="32" height="29" rx="5" mask={`url(#${maskId})`} style={{ fill: 'var(--marca-traco, #0f3d2e)' }} />
     </svg>
   );
 }
