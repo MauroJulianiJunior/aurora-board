@@ -41,6 +41,19 @@ function StorageInfo({ kind }: { kind: 'indexeddb' | 'memory' }) {
       .catch(() => undefined);
   }, []);
 
+  const desktop = window.auroraDesktop;
+  if (desktop && kind === 'indexeddb') {
+    return (
+      <div className="storage-info" role="note">
+        <p>
+          <strong>Onde ficam os dados:</strong> na pasta do app, <code>{desktop.dataFolder}</code>, nesta máquina. Não há
+          conta, servidor nem sincronização. {usage && <span>({usage})</span>}
+        </p>
+        <p>Desinstalar o app pergunta antes de apagar os quadros. Faça backups com “Exportar todos”.</p>
+      </div>
+    );
+  }
+
   if (kind === 'memory') {
     return (
       <div className="storage-info" role="note">

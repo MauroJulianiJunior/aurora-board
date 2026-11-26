@@ -1,5 +1,7 @@
 # Aurora Board
 
+<img src="build/icone/aurora-board-256.png" alt="" width="96" height="96">
+
 Lousa digital pessoal, privada e local. Feita para aula e projeção: formas, setas que se ligam às
 formas, texto, caneta, borracha, atalhos de teclado, salvamento automático no navegador e exportação
 em PNG, SVG e JSON.
@@ -13,7 +15,43 @@ Testes: Vitest (unidade) e Playwright (ponta a ponta).
 
 ---
 
-## Como rodar
+## Instalar no Windows (app de desktop)
+
+O jeito mais simples de usar: um instalador que põe o Aurora Board no Menu Iniciar e na área de trabalho.
+A lousa abre numa janela própria, sem barra de navegador, e funciona sem internet.
+
+1. Gere o instalador (uma vez por versão). Abra o PowerShell (tecla Windows → `PowerShell` → Enter) e cole
+   uma linha por vez:
+   ```powershell
+   cd C:\Desenvolvimento\aurora-board
+   npm run installer
+   ```
+   No fim aparece `Pronto:` com o caminho `release\AuroraBoard-Setup-0.1.0.exe`.
+2. Dê dois cliques nesse arquivo e siga o assistente. Não pede administrador.
+3. Abra pelo atalho **Aurora Board** (área de trabalho ou Menu Iniciar).
+
+| O quê | Onde |
+|---|---|
+| Programa | `%LOCALAPPDATA%\Programs\Aurora Board\AuroraBoard.exe` |
+| Quadros e preferências | `%LOCALAPPDATA%\AuroraBoard\` (perfil do WebView2, com o IndexedDB) |
+| Desinstalar | Configurações → Aplicativos → Aurora Board. Ele **pergunta** se apaga os quadros; o padrão é não apagar |
+
+Como funciona: o `AuroraBoard.exe` (Go, ~8 MB, sem dependências) leva a lousa dentro dele, sobe um servidor
+só em `127.0.0.1:47180` (com a mesma CSP do `npm start`) e abre a janela com o **WebView2**, o motor do Edge que
+já vem no Windows 11. Fechar a janela encerra tudo. Abrir o atalho de novo com o app aberto só traz a janela
+para a frente. O botão de tela cheia põe a janela inteira em tela cheia (para o projetor).
+
+> Os quadros do app de desktop ficam separados dos do navegador (`npm start`): são perfis diferentes. Para levar
+> de um para o outro, use **Quadros → Exportar todos (backup)** de um lado e **Importar arquivo** do outro.
+
+O instalador não é assinado digitalmente. Gerado e usado nesta máquina, o Windows não reclama; se o arquivo for
+baixado da internet em outro PC, o SmartScreen mostra "O Windows protegeu o computador" (**Mais informações →
+Executar assim mesmo**).
+
+Para gerar só o executável, sem instalador: `npm run desktop` (sai em `release\app\AuroraBoard.exe`).
+Pré-requisitos para gerar: Node 22.12+, Go 1.22+ e Inno Setup 6 (`winget install JRSoftware.InnoSetup`).
+
+## Como rodar no navegador (desenvolvimento)
 
 Pré-requisito: **Node.js 22.12 ou mais novo** (`node -v` para conferir).
 
@@ -54,6 +92,9 @@ Para parar: `Ctrl+C` no PowerShell. Se o build já existe, `npm run serve` sobe 
 | `npm run serve` | Só o servidor de produção (precisa de um build feito) |
 | `npm run preview` | O preview do Vite (http://127.0.0.1:4173), com as mesmas cabeceiras de segurança (precisa de um build feito) |
 | `npm run check` | Testes de unidade + build + teste ponta a ponta, em sequência |
+| `npm run desktop` | Gera o app de desktop do Windows em `release\app\AuroraBoard.exe` (inclui `go vet` e `go test`) |
+| `npm run installer` | O mesmo + o instalador `release\AuroraBoard-Setup-<versão>.exe` e o `.sha256` |
+| `npm run icons` | Regenera os ícones (`.ico`, recurso do `.exe`, favicon) a partir de `design/marca/icone.svg` |
 
 ### Configuração (`.env`)
 
@@ -172,6 +213,11 @@ src/
   ui/              barra de ferramentas, painel de estilo, diálogos, avisos, estado vazio
   App.tsx          inicialização, salvamento automático, atalhos globais, copiar/colar, importar/exportar
 scripts/serve.mjs  servidor estático de produção (só 127.0.0.1, cabeceiras de segurança)
+scripts/build-desktop.mjs  monta o app de desktop e o instalador
+scripts/icons.mjs  gera o .ico e o .syso (recurso de ícone do .exe) sem ferramenta externa
+desktop/           app de desktop em Go: servidor embutido (server.go) e janela WebView2 (main_windows.go)
+installer/         script do Inno Setup (por usuário, sem administrador)
+design/marca/      a marca: icone.svg é a fonte de todos os ícones
 tests/unit/        Vitest: geometria, operações, validação, fluxo principal, IndexedDB (fake-indexeddb)
 tests/e2e/         Playwright: o teste de fumaça do ciclo completo
 ```
@@ -193,6 +239,10 @@ Decisões que valem saber:
   no console.
 
 ### Design
+
+**Marca:** a "lousa recortada", escolhida pelo Mauro em 26-nov-2026: os colchetes de canto verdes do design system
+Aurora em volta de uma lousa cheia com um diagrama vazado (duas formas ligadas), sobre o ladrilho preto dos ícones
+dos sistemas Aurora. Fonte única: `design/marca/icone.svg`; dentro do app, a lousa da marca segue o tema.
 
 Design system Aurora (v1.1) numa versão clara, pensada para projetor: o preto do sistema recua para o
 texto, a lousa é papel `#F5F7F5` com grade de pontos, os painéis são cartões brancos. O verde `#00E676`
@@ -226,6 +276,8 @@ têm a luminosidade invertida. Na exportação PNG/SVG dá para escolher o tema 
 - O texto exportado usa as fontes embutidas no próprio SVG; programas que não leem `@font-face` dentro de SVG
   mostram a fonte do sistema.
 - Testado só no Chromium (Chrome/Edge). Firefox e Safari não foram testados.
+- O app de desktop é só para Windows 10/11 x64 e usa a porta 47180 (fixa: os quadros dependem dela). Se outro
+  programa ocupar essa porta, o app avisa e não abre. O instalador não é assinado digitalmente.
 
 ## Licença
 

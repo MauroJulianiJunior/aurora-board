@@ -1,5 +1,5 @@
 node_modules/
-dist/
+/dist/
 coverage/
 test-results/
 playwright-report/
@@ -10,3 +10,6 @@ blob-report/
 *.log
 .DS_Store
 Thumbs.db
+release/
+desktop/app/dist/*
+!desktop/app/dist/.gitkeep

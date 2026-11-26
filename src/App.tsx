@@ -554,6 +554,15 @@ export function App() {
   };
 
   const toggleFullscreen = () => {
+    // No app de desktop, a janela nativa é que vai para a tela cheia (o WebView2 não a redimensiona).
+    const desktop = window.auroraDesktop;
+    if (desktop) {
+      desktop
+        .toggleFullscreen()
+        .then((on) => setFullscreen(Boolean(on)))
+        .catch(() => notify('error', 'Não foi possível alternar a tela cheia.'));
+      return;
+    }
     if (document.fullscreenElement) void document.exitFullscreen().catch(() => undefined);
     else void document.documentElement.requestFullscreen().catch(() => notify('error', 'O navegador não permitiu a tela cheia.'));
   };

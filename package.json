@@ -18,6 +18,9 @@
     "start": "npm run build && npm run serve",
     "serve": "node --env-file-if-exists=.env scripts/serve.mjs",
     "preview": "vite preview",
+    "icons": "node scripts/icons.mjs",
+    "desktop": "node scripts/build-desktop.mjs",
+    "installer": "node scripts/build-desktop.mjs --installer",
     "check": "npm run test && npm run build && npm run test:e2e"
   },
   "dependencies": {

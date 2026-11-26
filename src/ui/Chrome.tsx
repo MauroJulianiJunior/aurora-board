@@ -196,7 +196,7 @@ export function ViewControls({
       <button type="button" className="icon-btn" aria-label="Modo foco: esconde os painéis (Alt+Z)" title="Modo foco — Alt+Z" onClick={onFocusMode}>
         <Icon name="focus" />
       </button>
-      {document.fullscreenEnabled && (
+      {(document.fullscreenEnabled || window.auroraDesktop) && (
         <button
           type="button"
           className="icon-btn"
