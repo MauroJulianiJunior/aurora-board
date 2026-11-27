@@ -3,6 +3,11 @@
   "private": true,
   "version": "0.1.0",
   "description": "Lousa digital pessoal e local: formas, conectores, texto, caneta, salvamento automático no navegador e exportação em PNG, SVG e JSON.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MauroJulianiJunior/aurora-board.git"
+  },
   "type": "module",
   "engines": {
     "node": ">=22.12"

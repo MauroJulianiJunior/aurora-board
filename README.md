@@ -20,6 +20,9 @@ Testes: Vitest (unidade) e Playwright (ponta a ponta).
 O jeito mais simples de usar: um instalador que põe o Aurora Board no Menu Iniciar e na área de trabalho.
 A lousa abre numa janela própria, sem barra de navegador, e funciona sem internet.
 
+O instalador pronto de cada versão fica na página **Releases** do repositório no GitHub
+(`AuroraBoard-Setup-<versão>.exe`, com o `.sha256` ao lado). Para gerar você mesmo:
+
 1. Gere o instalador (uma vez por versão). Abra o PowerShell (tecla Windows → `PowerShell` → Enter) e cole
    uma linha por vez:
    ```powershell
@@ -281,5 +284,6 @@ têm a luminosidade invertida. Na exportação PNG/SVG dá para escolher o tema 
 
 ## Licença
 
-Ainda não definida para o código. As fontes (Inter, Space Grotesk, IBM Plex Mono) são OFL e vêm dos pacotes
-`@fontsource`.
+Código aberto sob a licença **MIT** (`LICENSE`): use, modifique e distribua à vontade, mantendo o aviso de
+copyright. Isso inclui a marca (`design/marca/`). Os componentes de terceiros e as licenças deles estão em
+`THIRD_PARTY_NOTICES.md` (as fontes Inter, Space Grotesk e IBM Plex Mono são OFL).
